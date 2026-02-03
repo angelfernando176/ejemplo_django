@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Empleados</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .btn { padding: 5px 10px; text-decoration: none; border-radius: 3px; }
+        .btn-crear { background: #28a745; color: white; }
+        .btn-editar { background: #ffc107; color: black; }
+        .btn-eliminar { background: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Empleados</h1>
+    <a href="{% url 'crear_empleado' %}" class="btn btn-crear">Nuevo Empleado</a>
+    <br><br>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Salario</th>
+            <th>Acciones</th>
+        </tr>
+        {% for empleado in empleados %}
+        <tr>
+            <td>{{ empleado.id }}</td>
+            <td>{{ empleado.nombre }} {{ empleado.apellido }}</td>
+            <td>{{ empleado.email }}</td>
+            <td>{{ empleado.telefono }}</td>
+            <td>${{ empleado.salario }}</td>
+            <td>
+                <a href="{% url 'editar_empleado' empleado.id %}" class="btn btn-editar">Editar</a>
+                <a href="{% url 'eliminar_empleado' empleado.id %}" class="btn btn-eliminar">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">No hay empleados registrados</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

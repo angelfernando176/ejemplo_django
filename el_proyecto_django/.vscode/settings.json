@@ -1,0 +1,60 @@
+﻿{
+    // CONFIGURACIÓN DJANGO PARA VSCode - GENERADO AUTOMÁTICAMENTE
+    "python.defaultInterpreterPath": "C:\Users\angel\vs\ejemplo\ejemplo_django\el_proyecto_django\venv\Scripts\python.exe",
+    
+    // FORZAR activación del entorno virtual
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.executeInFileDir": true,
+    
+    // Configuración de PowerShell
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell",
+            "args": ["-ExecutionPolicy", "Bypass"]
+        }
+    },
+    
+    // RUTAS CRÍTICAS para Pylance - CON RUTAS ABSOLUTAS
+    "python.analysis.extraPaths": [
+        "C:\Users\angel\vs\ejemplo\ejemplo_django\el_proyecto_django\venv",
+        "C:\Users\angel\vs\ejemplo\ejemplo_django\el_proyecto_django\venv\\django",
+        "C:\Users\angel\vs\ejemplo\ejemplo_django\el_proyecto_django"
+    ],
+    
+    // Desactivar advertencias molestas
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingModuleSource": "none",
+        "reportUndefinedVariable": "none",
+        "reportGeneralTypeIssues": "none"
+    },
+    
+    // Configuración general de Python
+    "python.analysis.typeCheckingMode": "off",
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.useLibraryCodeForTypes": true,
+    "python.languageServer": "Pylance",
+    
+    // Desactivar linters conflictivos
+    "python.linting.enabled": false,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": false,
+    "python.linting.mypyEnabled": false,
+    
+    // Configuración de archivos Python
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "never"
+        }
+    },
+    
+    // Excluir carpetas innecesarias
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/*.pyc": true
+    }
+}

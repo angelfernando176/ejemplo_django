@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eliminar Empleado</title>
+</head>
+<body>
+    <h1>¿Eliminar empleado?</h1>
+    <p>¿Está seguro de eliminar a {{ empleado.nombre }} {{ empleado.apellido }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sí, eliminar</button>
+        <a href="{% url 'lista_empleados' %}">Cancelar</a>
+    </form>
+</body>
+</html>

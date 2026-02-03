@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Empleado</title>
+</head>
+<body>
+    <h1>Editar Empleado: {{ empleado.nombre }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Actualizar</button>
+        <a href="{% url 'lista_empleados' %}">Cancelar</a>
+    </form>
+</body>
+</html>
