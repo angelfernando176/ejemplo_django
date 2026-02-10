@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Nuevo Artículo - Sistema de Gestión</title>
+    
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1> Crear Nuevo Artículo</h1>
+            <p class="subtitle">Complete el formulario para agregar un artículo al inventario</p>
+        </div>
+        
+        <div class="form-container">
+            <a href="{% url 'lista_articulos' %}" class="back-link">← Volver a la lista</a>
+            
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {% if message.tags == 'success' %} 
+                    {% elif message.tags == 'error' %} 
+                    {% elif message.tags == 'info' %} ℹ
+                    {% endif %}
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            
+            
+            <form method="post" id="crearForm">
+                {% csrf_token %}
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_codigo" class="required">Código del Artículo</label>
+                        {{ form.codigo }}
+                        {% if form.codigo.errors %}
+                            <div class="error-message">{{ form.codigo.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_nombre" class="required">Nombre del Artículo</label>
+                        {{ form.nombre }}
+                        {% if form.nombre.errors %}
+                            <div class="error-message">{{ form.nombre.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_descripcion">Descripción</label>
+                    {{ form.descripcion }}
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_categoria" class="required">Categoría</label>
+                        {{ form.categoria }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_estado">Estado</label>
+                        {{ form.estado }}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_precio_compra" class="required">Precio de Compra ($)</label>
+                        {{ form.precio_compra }}
+                        {% if form.precio_compra.errors %}
+                            <div class="error-message">{{ form.precio_compra.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_precio_venta" class="required">Precio de Venta ($)</label>
+                        {{ form.precio_venta }}
+                        {% if form.precio_venta.errors %}
+                            <div class="error-message">{{ form.precio_venta.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_cantidad_stock" class="required">Stock Actual</label>
+                        {{ form.cantidad_stock }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_cantidad_minima">Stock Mínimo</label>
+                        {{ form.cantidad_minima }}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_ubicacion">Ubicación en Almacén</label>
+                    {{ form.ubicacion }}
+                </div>
+                
+                <div class="form-actions">
+                    <a href="{% url 'lista_articulos' %}" class="btn btn-secondary">Cancelar</a>
+                    <button type="button" class="btn" onclick="resetForm()" style="background-color: #17a2b8; color: white;">
+                        🔄 Limpiar Formulario
+                    </button>
+                    <button type="submit" class="btn btn-primary">➕ Crear Artículo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Validación en tiempo real
+        function setupValidation() {
+            const precioCompra = document.getElementById('id_precio_compra');
+            const precioVenta = document.getElementById('id_precio_venta');
+            
+            if (precioCompra && precioVenta) {
+                precioVenta.addEventListener('change', function() {
+                    const compra = parseFloat(precioCompra.value) || 0;
+                    const venta = parseFloat(this.value) || 0;
+                    
+                    if (venta < compra) {
+                        alert('⚠️ El precio de venta no puede ser menor al precio de compra');
+                        this.focus();
+                        this.style.borderColor = '#dc3545';
+                        this.style.backgroundColor = '#f8d7da';
+                    } else {
+                        this.style.borderColor = '#28a745';
+                        this.style.backgroundColor = '';
+                    }
+                });
+                
+                precioCompra.addEventListener('change', function() {
+                    this.style.borderColor = '';
+                    this.style.backgroundColor = '';
+                });
+            }
+            
+            // Validar código único (simulación)
+            const codigoInput = document.getElementById('id_codigo');
+            if (codigoInput) {
+                codigoInput.addEventListener('blur', function() {
+                    const codigo = this.value.trim().toUpperCase();
+                    if (codigo) {
+                        this.value = codigo;
+                    }
+                });
+            }
+        }
+        
+        // Resetear formulario
+        function resetForm() {
+            if (confirm('¿Está seguro de limpiar todos los campos del formulario?')) {
+                document.getElementById('crearForm').reset();
+                
+                // Resetear estilos
+                const inputs = document.querySelectorAll('input, textarea, select');
+                inputs.forEach(input => {
+                    input.style.borderColor = '';
+                    input.style.backgroundColor = '';
+                });
+                
+                // Enfocar en el primer campo
+                document.getElementById('id_codigo').focus();
+            }
+        }
+        
+        // Calcular precio de venta sugerido (20% de ganancia)
+        function sugerirPrecioVenta() {
+            const precioCompra = document.getElementById('id_precio_compra');
+            const precioVenta = document.getElementById('id_precio_venta');
+            
+            if (precioCompra && precioVenta && !precioVenta.value) {
+                const compra = parseFloat(precioCompra.value);
+                if (compra && compra > 0) {
+                    const sugerido = compra * 1.20; // 20% de ganancia
+                    precioVenta.value = sugerido.toFixed(2);
+                }
+            }
+        }
+        
+        // Inicializar validaciones cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            setupValidation();
+            
+            // Sugerir precio de venta cuando se ingrese precio de compra
+            const precioCompraInput = document.getElementById('id_precio_compra');
+            if (precioCompraInput) {
+                precioCompraInput.addEventListener('change', sugerirPrecioVenta);
+                precioCompraInput.addEventListener('blur', sugerirPrecioVenta);
+            }
+            
+            // Auto-completar código si está vacío basado en nombre
+            const nombreInput = document.getElementById('id_nombre');
+            const codigoInput = document.getElementById('id_codigo');
+            
+            if (nombreInput && codigoInput) {
+                nombreInput.addEventListener('blur', function() {
+                    if (!codigoInput.value && this.value) {
+                        // Crear código basado en las primeras 3 letras y un número aleatorio
+                        const prefix = this.value.substring(0, 3).toUpperCase();
+                        const randomNum = Math.floor(Math.random() * 900) + 100;
+                        codigoInput.value = prefix + '-' + randomNum;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

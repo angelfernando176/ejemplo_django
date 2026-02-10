@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Artículo - Sistema de Gestión</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #ff9800;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+        }
+        
+        .help-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            padding: 5px;
+            background-color: #f8d7da;
+            border-radius: 4px;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-warning {
+            background-color: #ff9800;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #f57c00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff9800;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .articulo-info {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✏️ Editar Artículo</h1>
+            <p class="subtitle">Modifique los datos del artículo</p>
+        </div>
+        
+        <div class="form-container">
+            <a href="{% url 'lista_articulos' %}" class="back-link">← Volver a la lista</a>
+            
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {% if message.tags == 'success' %} ✅
+                    {% elif message.tags == 'error' %} ❌
+                    {% endif %}
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            
+            <div class="articulo-info">
+                <strong>📝 Artículo a editar:</strong> {{ articulo.codigo }} - {{ articulo.nombre }}
+                <br>
+                <small>ID: {{ articulo.id }} | Creado: {{ articulo.fecha_creacion|date:"d/m/Y H:i" }}</small>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_codigo" class="required">Código del Artículo</label>
+                        {{ form.codigo }}
+                        {% if form.codigo.errors %}
+                            <div class="error-message">{{ form.codigo.errors.0 }}</div>
+                        {% endif %}
+                        <div class="help-text">Código único identificador (Ej: ART-001)</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_nombre" class="required">Nombre del Artículo</label>
+                        {{ form.nombre }}
+                        {% if form.nombre.errors %}
+                            <div class="error-message">{{ form.nombre.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_descripcion">Descripción</label>
+                    {{ form.descripcion }}
+                    <div class="help-text">Descripción detallada del artículo</div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_categoria" class="required">Categoría</label>
+                        {{ form.categoria }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_estado">Estado</label>
+                        {{ form.estado }}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_precio_compra" class="required">Precio de Compra ($)</label>
+                        {{ form.precio_compra }}
+                        {% if form.precio_compra.errors %}
+                            <div class="error-message">{{ form.precio_compra.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_precio_venta" class="required">Precio de Venta ($)</label>
+                        {{ form.precio_venta }}
+                        {% if form.precio_venta.errors %}
+                            <div class="error-message">{{ form.precio_venta.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_cantidad_stock" class="required">Stock Actual</label>
+                        {{ form.cantidad_stock }}
+                        <div class="help-text">Cantidad disponible en inventario</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_cantidad_minima">Stock Mínimo</label>
+                        {{ form.cantidad_minima }}
+                        <div class="help-text">Cantidad mínima antes de alerta</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_ubicacion">Ubicación en Almacén</label>
+                    {{ form.ubicacion }}
+                    <div class="help-text">Ej: Estante A-5, Pasillo 3, Almacén Principal</div>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="{% url 'lista_articulos' %}" class="btn btn-secondary">Cancelar</a>
+                    <a href="{% url 'eliminar_articulo' articulo.id %}" class="btn btn-danger" 
+                       onclick="return confirm('¿Está seguro de eliminar este artículo?');">
+                        Eliminar
+                    </a>
+                    <button type="submit" class="btn btn-warning">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Confirmación antes de eliminar
+        document.querySelector('a.btn-danger').addEventListener('click', function(e) {
+            if (!confirm('¿Está seguro de eliminar este artículo? Esta acción no se puede deshacer.')) {
+                e.preventDefault();
+            }
+        });
+        
+        // Validación en tiempo real para precios
+        document.getElementById('id_precio_venta').addEventListener('change', function() {
+            var precioCompra = parseFloat(document.getElementById('id_precio_compra').value);
+            var precioVenta = parseFloat(this.value);
+            
+            if (precioVenta < precioCompra) {
+                alert('⚠️ El precio de venta no puede ser menor al precio de compra');
+                this.focus();
+            }
+        });
+    </script>
+</body>
+</html>

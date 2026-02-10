@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'empleados',
+    'articulo',
+##    'productos',
 ]
 
 MIDDLEWARE = [
@@ -79,32 +81,32 @@ WSGI_APPLICATION = 'empleado_django1.wsgi.application'
 #        'NAME': BASE_DIR / 'db.sqlite3',
 #    }
 #}
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'empleados_db',        # Nombre de BDD
-#        'USER': 'postgres',            # Tu usuario PostgreSQL
-#        'PASSWORD': 'postgres',        # Tu contraseña
-#        'HOST': 'localhost',
-#        'PORT': '5432',
-#    }
-#}
-
-# empleado_django1/settings.py
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # ← CAMBIADO A 'mysql'
-        'NAME': 'empleados_db',
-        'USER': 'root',
-        'PASSWORD': 'adminadmin',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'empleados_db',        # Nombre de BDD
+        'USER': 'postgres',            # Tu usuario PostgreSQL
+        'PASSWORD': 'postgres',        # Tu contraseña
         'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8mb4',
-        }
+        'PORT': '5432',
     }
 }
+
+# empleado_django1/settings.py
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',  # ← CAMBIADO A 'mysql'
+#        'NAME': 'empleados_db',
+#        'USER': 'root',
+#        'PASSWORD': 'adminadmin',
+#        'HOST': 'localhost',
+#        'PORT': '3306',
+#        'OPTIONS': {
+#            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#            'charset': 'utf8mb4',
+#        }
+#    }
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
